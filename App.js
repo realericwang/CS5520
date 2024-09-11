@@ -12,7 +12,7 @@ export default function App() {
       <Header title={appName}>
         <Text>Child Component</Text>
       </Header>
-      <Input />
+      <Input autoFocus={true} />
       <StatusBar style="auto" />
     </View>
   );
