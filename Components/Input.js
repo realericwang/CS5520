@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, TextInput, Button, Modal } from 'react-native';
-import React, { useState, useRef, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, Modal } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
 
 export default function Input({ autoFocus = false, inputHandler, visible }) {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const inputRef = useRef(null);
-  
+
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
@@ -27,13 +27,17 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
     if (text.length >= 3) {
       return <Text style={styles.feedbackText}>Thank you</Text>;
     } else {
-      return <Text style={styles.feedbackText}>Please type more than 3 characters</Text>;
+      return (
+        <Text style={styles.feedbackText}>
+          Please type more than 3 characters
+        </Text>
+      );
     }
   };
 
   const handleConfirm = () => {
     inputHandler(text);
-    setText('');
+    setText("");
   };
 
   return (
@@ -53,7 +57,9 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
           style={styles.input}
         />
         {isFocused && text.length > 0 && (
-          <Text style={styles.characterCount}>Character count: {text.length}</Text>
+          <Text style={styles.characterCount}>
+            Character count: {text.length}
+          </Text>
         )}
         {!isFocused && isSubmitted && renderFeedback()}
         <View style={styles.buttonContainer}>
@@ -67,15 +73,15 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   input: {
-    borderBottomColor: 'red',
+    borderBottomColor: "red",
     borderBottomWidth: 1,
-    width: '80%',
+    width: "80%",
     fontSize: 18,
     paddingVertical: 10,
     marginBottom: 20,
@@ -87,10 +93,10 @@ const styles = StyleSheet.create({
   feedbackText: {
     fontSize: 16,
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   buttonContainer: {
-    width: '30%',
+    width: "30%",
     marginTop: 20,
   },
 });

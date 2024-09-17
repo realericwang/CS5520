@@ -1,18 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, Button, SafeAreaView, View } from 'react-native';
-import Header from './Components/Header';
-import Input from './Components/Input'; 
-import { useState } from 'react';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, Button, SafeAreaView, View } from "react-native";
+import Header from "./Components/Header";
+import Input from "./Components/Input";
+import { useState } from "react";
 
 export default function App() {
-  const [receivedData, setReceivedData] = useState('');
+  const [receivedData, setReceivedData] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const appName = 'React Native NEU 5520';
+  const appName = "React Native NEU 5520";
 
   const handleInputData = (inputText) => {
     setReceivedData(inputText);
     setIsModalVisible(false);
-    console.log('Input text:', inputText);
+    console.log("Input text:", inputText);
   };
 
   return (
@@ -28,7 +28,11 @@ export default function App() {
       <View style={styles.bottomView}>
         <Text style={styles.receivedDataText}>{receivedData}</Text>
       </View>
-      <Input autoFocus={true} inputHandler={handleInputData} visible={isModalVisible} />
+      <Input
+        autoFocus={true}
+        inputHandler={handleInputData}
+        visible={isModalVisible}
+      />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
@@ -37,19 +41,19 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   topView: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   bottomView: {
     flex: 4,
-    backgroundColor: '#d39248',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#d39248",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   childText: {
@@ -57,12 +61,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonContainer: {
-    width: '30%',
+    width: "30%",
     marginVertical: 20,
   },
   receivedDataText: {
     fontSize: 18,
-    textAlign: 'center',
-    color: 'red',
+    textAlign: "center",
+    color: "red",
   },
 });
