@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Modal } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 
-export default function Input({ autoFocus = false, inputHandler }) {
+export default function Input({ autoFocus = false, inputHandler, visible }) {
   const [text, setText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -32,32 +32,42 @@ export default function Input({ autoFocus = false, inputHandler }) {
   };
 
   const handleConfirm = () => {
-    // console.log('User input:', text);
     inputHandler(text);
+    setText('');
   };
 
   return (
-    <View>
-      <TextInput
-        ref={inputRef}
-        placeholder="Enter text here"
-        autoCorrect={true}
-        onChangeText={(changedText) => {
-          setText(changedText);
-        }}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        keyboardType="default"
-        value={text}
-        style={{ borderBottomColor: 'red', borderBottomWidth: 1 }}
-      />
-      {isFocused && text.length > 0 && (
-        <Text>Character count: {text.length}</Text>
-      )}
-      {!isFocused && isSubmitted && renderFeedback()}
-      <Button title="Confirm" onPress={handleConfirm} />
-    </View>
+    <Modal visible={visible} animationType="slide">
+      <View style={styles.container}>
+        <TextInput
+          ref={inputRef}
+          placeholder="Enter text here"
+          autoCorrect={true}
+          onChangeText={(changedText) => {
+            setText(changedText);
+          }}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          keyboardType="default"
+          value={text}
+          style={{ borderBottomColor: 'red', borderBottomWidth: 1 }}
+        />
+        {isFocused && text.length > 0 && (
+          <Text>Character count: {text.length}</Text>
+        )}
+        {!isFocused && isSubmitted && renderFeedback()}
+        <Button title="Confirm" onPress={handleConfirm} />
+      </View>
+    </Modal>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'red',
+  },
+});

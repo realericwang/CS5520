@@ -1,15 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 import Header from './Components/Header';
 import Input from './Components/Input'; 
 import { useState } from 'react';
 
 export default function App() {
   const [receivedData, setReceivedData] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = 'React Native NEU 5520';
 
   const handleInputData = (inputText) => {
     setReceivedData(inputText);
+    setIsModalVisible(false);
     console.log('Input text:', inputText);
   };
 
@@ -18,7 +20,8 @@ export default function App() {
       <Header title={appName}>
         <Text>Child Component</Text>
       </Header>
-      <Input autoFocus={true} inputHandler={handleInputData} />
+      <Button title="Add a goal" onPress={() => setIsModalVisible(true)} />
+      <Input autoFocus={true} inputHandler={handleInputData} visible={isModalVisible} />
       <Text>{receivedData}</Text>
       <StatusBar style="auto" />
     </View>
