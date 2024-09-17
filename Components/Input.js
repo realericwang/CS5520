@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 
-export default function Input({ autoFocus = false }) {
+export default function Input({ autoFocus = false, inputHandler }) {
   const [text, setText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -32,7 +32,8 @@ export default function Input({ autoFocus = false }) {
   };
 
   const handleConfirm = () => {
-    console.log('User input:', text);
+    // console.log('User input:', text);
+    inputHandler(text);
   };
 
   return (
