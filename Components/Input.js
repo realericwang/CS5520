@@ -25,9 +25,9 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
 
   const renderFeedback = () => {
     if (text.length >= 3) {
-      return <Text>Thank you</Text>;
+      return <Text style={styles.feedbackText}>Thank you</Text>;
     } else {
-      return <Text>Please type more than 3 characters</Text>;
+      return <Text style={styles.feedbackText}>Please type more than 3 characters</Text>;
     }
   };
 
@@ -50,13 +50,15 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
           onBlur={handleBlur}
           keyboardType="default"
           value={text}
-          style={{ borderBottomColor: 'red', borderBottomWidth: 1 }}
+          style={styles.input}
         />
         {isFocused && text.length > 0 && (
-          <Text>Character count: {text.length}</Text>
+          <Text style={styles.characterCount}>Character count: {text.length}</Text>
         )}
         {!isFocused && isSubmitted && renderFeedback()}
-        <Button title="Confirm" onPress={handleConfirm} />
+        <View style={styles.buttonContainer}>
+          <Button title="Confirm" onPress={handleConfirm} />
+        </View>
       </View>
     </Modal>
   );
@@ -68,6 +70,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'red',
+    padding: 20,
+  },
+  input: {
+    borderBottomColor: 'red',
+    borderBottomWidth: 1,
+    width: '80%',
+    fontSize: 18,
+    paddingVertical: 10,
+    marginBottom: 20,
+  },
+  characterCount: {
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  feedbackText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    width: '30%',
+    marginTop: 20,
   },
 });
