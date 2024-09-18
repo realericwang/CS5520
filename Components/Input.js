@@ -51,12 +51,19 @@ export default function Input({
   const handleConfirm = () => {
     inputHandler(text);
     setText("");
+    onDismiss();
   };
 
   const handleCancel = () => {
     Alert.alert("Cancel", "Are you sure you want to cancel?", [
       { text: "No", style: "cancel" },
-      { text: "Yes", onPress: onDismiss },
+      {
+        text: "Yes",
+        onPress: () => {
+          setText("");
+          onDismiss();
+        },
+      },
     ]);
   };
 
