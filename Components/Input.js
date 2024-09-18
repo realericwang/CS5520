@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, TextInput, Button, Modal } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, Modal, Alert } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 
-export default function Input({ autoFocus = false, inputHandler, visible }) {
+export default function Input({ autoFocus = false, inputHandler, onDismiss, visible }) {
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -40,6 +40,17 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
     setText("");
   };
 
+  const handleCancel = () => {
+    Alert.alert(
+      "Cancel",
+      "Are you sure you want to cancel?",
+      [
+        { text: "No", style: "cancel" },
+        { text: "Yes", onPress: onDismiss }
+      ]
+    );
+  };
+
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.container}>
@@ -64,6 +75,8 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
         {!isFocused && isSubmitted && renderFeedback()}
         <View style={styles.buttonContainer}>
           <Button title="Confirm" onPress={handleConfirm} />
+          <View style={styles.buttonSpacer} />
+          <Button title="Cancel" onPress={handleCancel} color="red" />
         </View>
       </View>
     </Modal>
@@ -96,7 +109,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonContainer: {
-    width: "30%",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '80%',
     marginTop: 20,
+  },
+  buttonSpacer: {
+    width: 20,
   },
 });
