@@ -6,6 +6,7 @@ import {
   Button,
   Modal,
   Alert,
+  Image,
 } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 
@@ -18,6 +19,7 @@ export default function Input({
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isConfirmEnabled, setIsConfirmEnabled] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -76,12 +78,23 @@ export default function Input({
           autoCorrect={true}
           onChangeText={(changedText) => {
             setText(changedText);
+            setIsConfirmEnabled(changedText.length >= 3);
           }}
           onFocus={handleFocus}
           onBlur={handleBlur}
           keyboardType="default"
           value={text}
           style={styles.input}
+        />
+        <Image
+          source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2617/2617812.png' }}
+          style={styles.image}
+          alt="Network image"
+        />
+        <Image
+          source={require('../assets/2617812.png')}
+          style={styles.image}
+          alt="Local image"
         />
         {isFocused && text.length > 0 && (
           <Text style={styles.characterCount}>
@@ -90,7 +103,11 @@ export default function Input({
         )}
         {!isFocused && isSubmitted && renderFeedback()}
         <View style={styles.buttonContainer}>
-          <Button title="Confirm" onPress={handleConfirm} />
+          <Button
+            title="Confirm"
+            onPress={handleConfirm}
+            disabled={!isConfirmEnabled}
+          />
           <View style={styles.buttonSpacer} />
           <Button title="Cancel" onPress={handleCancel} color="red" />
         </View>
@@ -132,5 +149,10 @@ const styles = StyleSheet.create({
   },
   buttonSpacer: {
     width: 20,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginVertical: 10,
   },
 });
