@@ -87,12 +87,14 @@ export default function Input({
           style={styles.input}
         />
         <Image
-          source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2617/2617812.png' }}
+          source={{
+            uri: "https://cdn-icons-png.flaticon.com/512/2617/2617812.png",
+          }}
           style={styles.image}
           alt="Network image"
         />
         <Image
-          source={require('../assets/2617812.png')}
+          source={require("../assets/2617812.png")}
           style={styles.image}
           alt="Local image"
         />
