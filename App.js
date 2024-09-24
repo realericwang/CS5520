@@ -15,6 +15,10 @@ export default function App() {
     console.log("Input text:", inputText);
   };
 
+  const handleModalDismiss = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topView}>
@@ -31,6 +35,7 @@ export default function App() {
       <Input
         autoFocus={true}
         inputHandler={handleInputData}
+        onDismiss={handleModalDismiss}
         visible={isModalVisible}
       />
       <StatusBar style="auto" />

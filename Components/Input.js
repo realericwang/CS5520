@@ -1,10 +1,25 @@
-import { StyleSheet, Text, View, TextInput, Button, Modal } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Modal,
+  Alert,
+  Image,
+} from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 
-export default function Input({ autoFocus = false, inputHandler, visible }) {
+export default function Input({
+  autoFocus = false,
+  inputHandler,
+  onDismiss,
+  visible,
+}) {
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isConfirmEnabled, setIsConfirmEnabled] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -38,6 +53,20 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
   const handleConfirm = () => {
     inputHandler(text);
     setText("");
+    onDismiss();
+  };
+
+  const handleCancel = () => {
+    Alert.alert("Cancel", "Are you sure you want to cancel?", [
+      { text: "No", style: "cancel" },
+      {
+        text: "Yes",
+        onPress: () => {
+          setText("");
+          onDismiss();
+        },
+      },
+    ]);
   };
 
   return (
@@ -49,12 +78,25 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
           autoCorrect={true}
           onChangeText={(changedText) => {
             setText(changedText);
+            setIsConfirmEnabled(changedText.length >= 3);
           }}
           onFocus={handleFocus}
           onBlur={handleBlur}
           keyboardType="default"
           value={text}
           style={styles.input}
+        />
+        <Image
+          source={{
+            uri: "https://cdn-icons-png.flaticon.com/512/2617/2617812.png",
+          }}
+          style={styles.image}
+          alt="Network image"
+        />
+        <Image
+          source={require("../assets/2617812.png")}
+          style={styles.image}
+          alt="Local image"
         />
         {isFocused && text.length > 0 && (
           <Text style={styles.characterCount}>
@@ -63,7 +105,13 @@ export default function Input({ autoFocus = false, inputHandler, visible }) {
         )}
         {!isFocused && isSubmitted && renderFeedback()}
         <View style={styles.buttonContainer}>
-          <Button title="Confirm" onPress={handleConfirm} />
+          <Button
+            title="Confirm"
+            onPress={handleConfirm}
+            disabled={!isConfirmEnabled}
+          />
+          <View style={styles.buttonSpacer} />
+          <Button title="Cancel" onPress={handleCancel} color="red" />
         </View>
       </View>
     </Modal>
@@ -96,7 +144,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonContainer: {
-    width: "30%",
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "80%",
     marginTop: 20,
+  },
+  buttonSpacer: {
+    width: 20,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginVertical: 10,
   },
 });
