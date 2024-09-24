@@ -30,7 +30,9 @@ export default function App() {
         </View>
       </View>
       <View style={styles.bottomView}>
-        <Text style={styles.receivedDataText}>{receivedData}</Text>
+        <View style={styles.receivedDataContainer}>
+          <Text style={styles.receivedDataText}>{receivedData}</Text>
+        </View>
       </View>
       <Input
         autoFocus={true}
@@ -68,6 +70,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "30%",
     marginVertical: 20,
+  },
+  receivedDataContainer: {
+    backgroundColor: "#f0f0f0", // Light gray background
+    padding: 10, // Add padding
+    borderRadius: 8, // Add border radius
   },
   receivedDataText: {
     fontSize: 18,
