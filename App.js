@@ -1,5 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, Button, SafeAreaView, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Button,
+  SafeAreaView,
+  View,
+  ScrollView,
+  FlatList,
+} from "react-native";
 import Header from "./Components/Header";
 import Input from "./Components/Input";
 import { useState } from "react";
@@ -33,11 +41,21 @@ export default function App() {
         </View>
       </View>
       <View style={styles.bottomView}>
-        {goals.map((goal) => (
-          <View key={goal.id} style={styles.goalItem}>
-            <Text style={styles.goalText}>{goal.text}</Text>
-          </View>
-        ))}
+        {/* <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+          {goals.map((goal) => (
+            <View key={goal.id} style={styles.goalItem}>
+              <Text style={styles.goalText}>{goal.text}</Text>
+            </View>
+          ))}
+        </ScrollView> */}
+        <FlatList
+          data={goals}
+          renderItem={({ item }) => (
+            <View key={item.id} style={styles.goalItem}>
+              <Text style={styles.goalText}>{item.text}</Text>
+            </View>
+          )}
+        />
       </View>
       <Input
         autoFocus={true}
@@ -83,5 +101,10 @@ const styles = StyleSheet.create({
   goalText: {
     fontSize: 18,
     color: "black",
+  },
+  scrollViewContainer: {
+    backgroundColor: "#d39248",
+    padding: 20,
+    alignItems: "center",
   },
 });
