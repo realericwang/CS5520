@@ -49,11 +49,15 @@ export default function App() {
           ))}
         </ScrollView> */}
         <FlatList
+          contentContainerStyle={styles.scrollViewContainer}
           data={goals}
           renderItem={({ item }) => (
-            <View key={item.id} style={styles.goalItem}>
-              <Text style={styles.goalText}>{item.text}</Text>
-            </View>
+            console.log(item),
+            (
+              <View key={item.id} style={styles.goalItem}>
+                <Text style={styles.goalText}>{item.text}</Text>
+              </View>
+            )
           )}
         />
       </View>
