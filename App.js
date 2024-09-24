@@ -11,6 +11,7 @@ import {
 import Header from "./Components/Header";
 import Input from "./Components/Input";
 import { useState } from "react";
+import GoalItem from "./Components/GoalItem";
 
 export default function App() {
   const [goals, setGoals] = useState([]);
@@ -51,14 +52,7 @@ export default function App() {
         <FlatList
           contentContainerStyle={styles.scrollViewContainer}
           data={goals}
-          renderItem={({ item }) => (
-            console.log(item),
-            (
-              <View key={item.id} style={styles.goalItem}>
-                <Text style={styles.goalText}>{item.text}</Text>
-              </View>
-            )
-          )}
+          renderItem={({ item }) => <GoalItem text={item.text} />}
         />
       </View>
       <Input
@@ -95,16 +89,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "30%",
     marginVertical: 20,
-  },
-  goalItem: {
-    backgroundColor: "#f0f0f0",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  goalText: {
-    fontSize: 18,
-    color: "black",
   },
   scrollViewContainer: {
     backgroundColor: "#d39248",
