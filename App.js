@@ -1,12 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  Button,
-  SafeAreaView,
-  View,
-  FlatList,
-} from "react-native";
+import { StyleSheet, Text, Button, SafeAreaView, View } from "react-native";
 import Header from "./Components/Header";
 import Input from "./Components/Input";
 import { useState } from "react";
@@ -19,7 +12,7 @@ export default function App() {
   const handleInputData = (inputText) => {
     setGoals((currentGoals) => [
       ...currentGoals,
-      { id: Math.random().toString(), text: inputText },
+      { id: Math.random(), text: inputText },
     ]);
     setIsModalVisible(false);
     console.log("Goal added:", inputText);
@@ -40,15 +33,11 @@ export default function App() {
         </View>
       </View>
       <View style={styles.bottomView}>
-        <FlatList
-          data={goals}
-          renderItem={({ item }) => (
-            <View style={styles.goalItem}>
-              <Text style={styles.goalText}>{item.text}</Text>
-            </View>
-          )}
-          keyExtractor={(item) => item.id}
-        />
+        {goals.map((goal) => (
+          <View key={goal.id} style={styles.goalItem}>
+            <Text style={styles.goalText}>{goal.text}</Text>
+          </View>
+        ))}
       </View>
       <Input
         autoFocus={true}
