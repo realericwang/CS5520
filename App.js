@@ -1,18 +1,28 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, Button, SafeAreaView, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Button,
+  SafeAreaView,
+  View,
+  FlatList,
+} from "react-native";
 import Header from "./Components/Header";
 import Input from "./Components/Input";
 import { useState } from "react";
 
 export default function App() {
-  const [receivedData, setReceivedData] = useState("");
+  const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "React Native NEU 5520";
 
   const handleInputData = (inputText) => {
-    setReceivedData(inputText);
+    setGoals((currentGoals) => [
+      ...currentGoals,
+      { id: Math.random().toString(), text: inputText },
+    ]);
     setIsModalVisible(false);
-    console.log("Input text:", inputText);
+    console.log("Goal added:", inputText);
   };
 
   const handleModalDismiss = () => {
@@ -30,9 +40,15 @@ export default function App() {
         </View>
       </View>
       <View style={styles.bottomView}>
-        <View style={styles.receivedDataContainer}>
-          <Text style={styles.receivedDataText}>{receivedData}</Text>
-        </View>
+        <FlatList
+          data={goals}
+          renderItem={({ item }) => (
+            <View style={styles.goalItem}>
+              <Text style={styles.goalText}>{item.text}</Text>
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+        />
       </View>
       <Input
         autoFocus={true}
@@ -59,8 +75,6 @@ const styles = StyleSheet.create({
   bottomView: {
     flex: 4,
     backgroundColor: "#d39248",
-    alignItems: "center",
-    justifyContent: "center",
     padding: 20,
   },
   childText: {
@@ -71,14 +85,14 @@ const styles = StyleSheet.create({
     width: "30%",
     marginVertical: 20,
   },
-  receivedDataContainer: {
-    backgroundColor: "#f0f0f0", // Light gray background
-    padding: 10, // Add padding
-    borderRadius: 8, // Add border radius
+  goalItem: {
+    backgroundColor: "#f0f0f0",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 10,
   },
-  receivedDataText: {
+  goalText: {
     fontSize: 18,
-    textAlign: "center",
-    color: "red",
+    color: "black",
   },
 });
