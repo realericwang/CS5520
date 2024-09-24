@@ -70,48 +70,50 @@ export default function Input({
   };
 
   return (
-    <Modal visible={visible} animationType="slide">
+    <Modal visible={visible} animationType="slide" transparent={true}>
       <View style={styles.container}>
-        <TextInput
-          ref={inputRef}
-          placeholder="Enter text here"
-          autoCorrect={true}
-          onChangeText={(changedText) => {
-            setText(changedText);
-            setIsConfirmEnabled(changedText.length >= 3);
-          }}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          keyboardType="default"
-          value={text}
-          style={styles.input}
-        />
-        <Image
-          source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/2617/2617812.png",
-          }}
-          style={styles.image}
-          alt="Network image"
-        />
-        <Image
-          source={require("../assets/2617812.png")}
-          style={styles.image}
-          alt="Local image"
-        />
-        {isFocused && text.length > 0 && (
-          <Text style={styles.characterCount}>
-            Character count: {text.length}
-          </Text>
-        )}
-        {!isFocused && isSubmitted && renderFeedback()}
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Confirm"
-            onPress={handleConfirm}
-            disabled={!isConfirmEnabled}
+        <View style={styles.contentContainer}>
+          <TextInput
+            ref={inputRef}
+            placeholder="Enter text here"
+            autoCorrect={true}
+            onChangeText={(changedText) => {
+              setText(changedText);
+              setIsConfirmEnabled(changedText.length >= 3);
+            }}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            keyboardType="default"
+            value={text}
+            style={styles.input}
           />
-          <View style={styles.buttonSpacer} />
-          <Button title="Cancel" onPress={handleCancel} color="red" />
+          <Image
+            source={{
+              uri: "https://cdn-icons-png.flaticon.com/512/2617/2617812.png",
+            }}
+            style={styles.image}
+            alt="Network image"
+          />
+          <Image
+            source={require("../assets/2617812.png")}
+            style={styles.image}
+            alt="Local image"
+          />
+          {isFocused && text.length > 0 && (
+            <Text style={styles.characterCount}>
+              Character count: {text.length}
+            </Text>
+          )}
+          {!isFocused && isSubmitted && renderFeedback()}
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Confirm"
+              onPress={handleConfirm}
+              disabled={!isConfirmEnabled}
+            />
+            <View style={styles.buttonSpacer} />
+            <Button title="Cancel" onPress={handleCancel} color="red" />
+          </View>
         </View>
       </View>
     </Modal>
@@ -121,10 +123,16 @@ export default function Input({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+  },
+  contentContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+    width: "90%",
+    alignItems: "center",
   },
   input: {
     borderBottomColor: "red",
