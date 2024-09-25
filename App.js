@@ -60,6 +60,16 @@ export default function App() {
           renderItem={({ item }) => (
             <GoalItem item={item} onDelete={handleDelete} />
           )}
+          ListEmptyComponent={
+            <Text style={styles.emptyListText}>No goals to show</Text>
+          }
+          ListHeaderComponent={
+            goals.length > 0 ? (
+              <View style={styles.headerContainer}>
+                <Text style={styles.headerText}>My Goals</Text>
+              </View>
+            ) : null
+          }
         />
       </View>
       <Input
@@ -101,5 +111,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#d39248",
     padding: 20,
     alignItems: "center",
+  },
+  emptyListText: {
+    fontSize: 18,
+    color: '#fff',
+    textAlign: 'center',
+    marginTop: 20,
+    fontStyle: 'italic',
+  },
+  headerContainer: {
+    backgroundColor: '#4a69bd',
+    padding: 15,
+    marginBottom: 20,
+    borderRadius: 10,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
   },
 });
