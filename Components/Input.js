@@ -28,6 +28,15 @@ export default function Input({
     }
   }, [autoFocus]);
 
+  useEffect(() => {
+    if (visible) {
+      setText("");
+      setIsConfirmEnabled(false);
+      setIsFocused(false);
+      setIsSubmitted(false);
+    }
+  }, [visible]);
+
   const handleBlur = () => {
     setIsFocused(false);
     setIsSubmitted(true);
@@ -53,6 +62,7 @@ export default function Input({
   const handleConfirm = () => {
     inputHandler(text);
     setText("");
+    setIsConfirmEnabled(false);
     onDismiss();
   };
 
@@ -63,6 +73,7 @@ export default function Input({
         text: "Yes",
         onPress: () => {
           setText("");
+          setIsConfirmEnabled(false);
           onDismiss();
         },
       },
