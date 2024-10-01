@@ -75,7 +75,11 @@ export default function Home({ navigation }) {
           contentContainerStyle={styles.scrollViewContainer}
           data={goals}
           renderItem={({ item }) => (
-            <GoalItem item={item} onDelete={handleDelete} pressHandler={handleGoalPress}/>
+            <GoalItem
+              item={item}
+              onDelete={handleDelete}
+              pressHandler={handleGoalPress}
+            />
           )}
           ItemSeparatorComponent={ItemSeparator}
           ListEmptyComponent={
