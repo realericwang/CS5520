@@ -14,7 +14,7 @@ export default function GoalItem({ item, onDelete, pressHandler }) {
 
   return (
     <View style={styles.textContainer}>
-      <Text style={styles.text}>{goalObj.text}</Text>
+      <Text style={styles.text}>{item.text}</Text>
       <Button title="X" color="grey" onPress={handleDelete} />
       <Button title="i" color="grey" onPress={handlePress} />
     </View>

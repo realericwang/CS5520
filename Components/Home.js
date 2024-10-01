@@ -13,7 +13,7 @@ import Input from "./Input";
 import { useState } from "react";
 import GoalItem from "./GoalItem";
 
-export default function Home() {
+export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "React Native NEU 5520";
@@ -53,6 +53,13 @@ export default function Home() {
     );
   };
 
+  function handleGoalPress(pressedGoal) {
+    //receive the goal obj
+    console.log(pressedGoal);
+    // navigate to GoalDetails and pass goal obj as params
+    navigation.navigate("Details", { goalData: pressedGoal });
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topView}>
@@ -68,7 +75,7 @@ export default function Home() {
           contentContainerStyle={styles.scrollViewContainer}
           data={goals}
           renderItem={({ item }) => (
-            <GoalItem item={item} onDelete={handleDelete} />
+            <GoalItem item={item} onDelete={handleDelete} pressHandler={handleGoalPress}/>
           )}
           ItemSeparatorComponent={ItemSeparator}
           ListEmptyComponent={
