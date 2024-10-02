@@ -1,15 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
-export default function GoalItem({ item, onDelete, pressHandler }) {
+export default function GoalItem({ item, onDelete }) {
+  const navigation = useNavigation();
+
   const handleDelete = () => {
     onDelete(item.id);
   };
 
   function handlePress() {
-    // call a callbackfn received from parent
-    // pass the goal obj back to Home.js
-    pressHandler(item);
+    navigation.navigate("Details", { goalData: item });
   }
 
   return (

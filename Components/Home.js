@@ -78,7 +78,6 @@ export default function Home({ navigation }) {
             <GoalItem
               item={item}
               onDelete={handleDelete}
-              pressHandler={handleGoalPress}
             />
           )}
           ItemSeparatorComponent={ItemSeparator}
