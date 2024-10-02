@@ -10,34 +10,33 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: "purple" },
+          headerTintColor: "white",
+        }}
+      >
         <Stack.Screen
           name="Home"
           component={Home}
           options={{
-            headerStyle: { backgroundColor: "purple" },
-            headerTintColor: "white",
             title: "My Goals",
           }}
         />
         <Stack.Screen
           name="Details"
           component={GoalDetails}
-          options={({ route }) => {
-            return {
-              title: route.params ? route.params.goalData.text : "More Details",
-              headerRight: () => {
-                return (
-                  <Button
-                    title="Warning"
-                    onPress={() => {
-                      console.log("warning");
-                    }}
-                  />
-                );
-              },
-            };
-          }}
+          options={({ route }) => ({
+            title: route.params ? route.params.goalData.text : "More Details",
+            headerRight: () => (
+              <Button
+                title="Warning"
+                onPress={() => {
+                  console.log("warning");
+                }}
+              />
+            ),
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>
