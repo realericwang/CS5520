@@ -14,12 +14,12 @@ export default function GoalItem({ item, onDelete }) {
   }
 
   return (
-    <Pressable onPress={handlePress}>
-      <View style={styles.textContainer}>
+    <View style={styles.textContainer}>
+      <Pressable onPress={handlePress} style={styles.pressable}>
         <Text style={styles.text}>{item.text}</Text>
-        <Button title="X" color="grey" onPress={handleDelete} />
-      </View>
-    </Pressable>
+      </Pressable>
+      <Button title="X" color="grey" onPress={handleDelete} />
+    </View>
   );
 }
 
