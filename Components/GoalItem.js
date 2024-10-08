@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PressableButton from "./PressableButton";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function GoalItem({ item, onDelete }) {
   const navigation = useNavigation();
@@ -31,7 +32,7 @@ export default function GoalItem({ item, onDelete }) {
         pressedHandler={handleDelete}
         pressedStyle={styles.pressedDelete}
       >
-        <Text style={styles.text}>X</Text>
+        <MaterialCommunityIcons name="delete-outline" size={24} color="black" />
       </PressableButton>
     </View>
   );
