@@ -12,6 +12,7 @@ import Header from "./Header";
 import Input from "./Input";
 import { useState } from "react";
 import GoalItem from "./GoalItem";
+import PressableButton from "./PressableButton";
 
 export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
@@ -67,7 +68,13 @@ export default function Home({ navigation }) {
           <Text style={styles.childText}>Child Component</Text>
         </Header>
         <View style={styles.buttonContainer}>
-          <Button title="Add a goal" onPress={() => setIsModalVisible(true)} />
+          <PressableButton
+            componentStyle={styles.addGoalButton}
+            pressedHandler={() => setIsModalVisible(true)}
+            pressedStyle={styles.pressedAddGoalButton}
+          >
+            <Text style={styles.addGoalButtonText}>Add a goal</Text>
+          </PressableButton>
         </View>
       </View>
       <View style={styles.bottomView}>
@@ -175,5 +182,18 @@ const styles = StyleSheet.create({
     height: 10,
     width: 100,
     backgroundColor: "gray",
+  },
+  addGoalButton: {
+    backgroundColor: '#4a69bd',
+    padding: 10,
+    borderRadius: 5,
+  },
+  pressedAddGoalButton: {
+    backgroundColor: '#1e3799',
+  },
+  addGoalButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 16,
   },
 });
