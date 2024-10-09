@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PressableButton from "./PressableButton";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function GoalItem({ item, onDelete }) {
   const navigation = useNavigation();
@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
   },
   pressable: {
     padding: 10,
