@@ -50,11 +50,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
   },
   pressable: {
-    flex: 1,
     padding: 10,
   },
   pressedItem: {
