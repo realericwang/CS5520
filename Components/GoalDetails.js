@@ -13,11 +13,13 @@ export default function GoalDetails({ navigation, route }) {
           pressedHandler={toggleWarning}
           componentStyle={{ marginRight: 10 }}
         >
-          {isWarning ? (
-            <Text>Normal</Text>
-          ) : (
-            <AntDesign name="warning" size={24} color="red" />
-          )}
+          <View style={styles.iconContainer}>
+            <AntDesign
+              name="warning"
+              size={24}
+              color={isWarning ? "red" : "green"}
+            />
+          </View>
         </PressableButton>
       ),
     });
@@ -36,11 +38,13 @@ export default function GoalDetails({ navigation, route }) {
           pressedHandler={toggleWarning}
           componentStyle={{ marginRight: 10 }}
         >
-          {isWarning ? (
-            <AntDesign name="warning" size={24} color="red" />
-          ) : (
-            <Text>Normal</Text>
-          )}
+          <View style={styles.iconContainer}>
+            <AntDesign
+              name="warning"
+              size={24}
+              color={isWarning ? "green" : "red"}
+            />
+          </View>
         </PressableButton>
       ),
     });
@@ -65,5 +69,8 @@ const styles = StyleSheet.create({
   },
   warningText: {
     color: "red",
+  },
+  iconContainer: {
+    backgroundColor: "transparent",
   },
 });
