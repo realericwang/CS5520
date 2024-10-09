@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View,Button } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import React, { useState, useEffect } from "react";
-import AntDesign from '@expo/vector-icons/AntDesign';
-import PressableButton from './PressableButton';
+import AntDesign from "@expo/vector-icons/AntDesign";
+import PressableButton from "./PressableButton";
 
 export default function GoalDetails({ navigation, route }) {
   const [isWarning, setIsWarning] = useState(false);

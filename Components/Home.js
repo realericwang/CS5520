@@ -160,14 +160,14 @@ const styles = StyleSheet.create({
   headerContainer: {
     marginBottom: 20,
     borderBottomWidth: 2,
-    borderBottomColor: '#4a69bd',
+    borderBottomColor: "#4a69bd",
     paddingBottom: 10,
   },
   headerText: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#4a69bd',
-    textAlign: 'left',
+    fontWeight: "bold",
+    color: "#4a69bd",
+    textAlign: "left",
   },
   footerContainer: {
     marginTop: 20,
@@ -184,16 +184,16 @@ const styles = StyleSheet.create({
     backgroundColor: "gray",
   },
   addGoalButton: {
-    backgroundColor: '#4a69bd',
+    backgroundColor: "#4a69bd",
     padding: 10,
     borderRadius: 5,
   },
   pressedAddGoalButton: {
-    backgroundColor: '#1e3799',
+    backgroundColor: "#1e3799",
   },
   addGoalButtonText: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     fontSize: 16,
   },
 });
