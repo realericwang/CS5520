@@ -81,10 +81,15 @@ export default function Home({ navigation }) {
         <FlatList
           contentContainerStyle={styles.scrollViewContainer}
           data={goals}
-          renderItem={({ item }) => (
-            <GoalItem item={item} onDelete={handleDelete} />
+          renderItem={({ item, index, separators }) => (
+            <GoalItem
+              item={item}
+              onDelete={handleDelete}
+              onPressIn={() => separators.highlight()}
+              onPressOut={() => separators.unhighlight()}
+            />
           )}
-          ItemSeparatorComponent={ItemSeparator}
+          ItemSeparatorComponent={({ highlighted }) => <ItemSeparator highlighted={highlighted} />}
           ListEmptyComponent={
             <Text style={styles.emptyListText}>No goals to show</Text>
           }
@@ -119,9 +124,9 @@ export default function Home({ navigation }) {
   );
 }
 
-const ItemSeparator = () => (
+const ItemSeparator = ({ highlighted }) => (
   <View style={styles.separatorContainer}>
-    <View style={styles.separator} />
+    <View style={[styles.separator, highlighted && styles.highlightedSeparator]} />
   </View>
 );
 
@@ -195,5 +200,8 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 16,
+  },
+  highlightedSeparator: {
+    backgroundColor: "#4a69bd",
   },
 });
