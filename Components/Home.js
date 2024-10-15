@@ -13,9 +13,10 @@ import Input from "./Input";
 import { useState, useEffect } from "react";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
-import { addToDB } from "../Firebase/firestoreHelper";
+import { addToDB, deleteFromDB } from "../Firebase/firestoreHelper";
 import { collection, onSnapshot } from "firebase/firestore";
 import { database } from "../Firebase/firebaseSetup";
+
 export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -53,7 +54,8 @@ export default function Home({ navigation }) {
   };
 
   function handleDelete(id) {
-    setGoals((currentGoals) => currentGoals.filter((goal) => goal.id !== id));
+    // setGoals((currentGoals) => currentGoals.filter((goal) => goal.id !== id));
+    deleteFromDB(id, "goals");
     console.log("Goal deleted:", id);
   }
 
