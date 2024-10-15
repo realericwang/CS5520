@@ -13,7 +13,7 @@ import Input from "./Input";
 import { useState, useEffect } from "react";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
-import { addToDB, deleteFromDB } from "../Firebase/firestoreHelper";
+import { addToDB, deleteFromDB, deleteAllFromDB } from "../Firebase/firestoreHelper";
 import { collection, onSnapshot } from "firebase/firestore";
 import { database } from "../Firebase/firebaseSetup";
 
@@ -27,7 +27,7 @@ export default function Home({ navigation }) {
     onSnapshot(collection(database, "goals"), (querySnapshot) => {
       let newArray = [];
       querySnapshot.forEach((docSnapshot) => {
-        console.log(docSnapshot.id);
+        // console.log(docSnapshot.id);
         newArray.push({
           text: docSnapshot.data().text,
           id: docSnapshot.id,
@@ -68,7 +68,7 @@ export default function Home({ navigation }) {
         {
           text: "Yes",
           onPress: () => {
-            setGoals([]);
+            deleteAllFromDB("goals");
             console.log("All goals deleted");
           },
         },
