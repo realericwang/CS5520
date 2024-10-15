@@ -10,17 +10,25 @@ import {
 } from "react-native";
 import Header from "./Header";
 import Input from "./Input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
-import { database } from "../Firebase/firebaseSetup";
 import { addToDB } from "../Firebase/firestoreHelper";
-
+import { collection, onSnapshot } from "firebase/firestore";
+import { database } from "../Firebase/firebaseSetup";
 export default function Home({ navigation }) {
-
   const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "React Native NEU 5520";
+
+  // fetch goals from firestore
+  useEffect(() => {
+    onSnapshot(collection(database, "goals"), (querySnapshot) => {
+      querySnapshot.forEach((docSnapshot) => {
+        console.log(docSnapshot.data());
+      });
+    });
+  }, []);
 
   const handleInputData = async (inputText) => {
     const newGoal = { text: inputText };
@@ -63,13 +71,6 @@ export default function Home({ navigation }) {
       ],
     );
   };
-
-  function handleGoalPress(pressedGoal) {
-    //receive the goal obj
-    console.log(pressedGoal);
-    // navigate to GoalDetails and pass goal obj as params
-    navigation.navigate("Details", { goalData: pressedGoal });
-  }
 
   return (
     <SafeAreaView style={styles.container}>
