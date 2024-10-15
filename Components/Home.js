@@ -17,20 +17,25 @@ import { database } from "../Firebase/firebaseSetup";
 import { addToDB } from "../Firebase/firestoreHelper";
 
 export default function Home({ navigation }) {
-  addToDB("goals", { name: "goal1" });
-  console.log(database);
 
   const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "React Native NEU 5520";
 
-  const handleInputData = (inputText) => {
-    setGoals((currentGoals) => [
-      ...currentGoals,
-      { id: Math.random(), text: inputText },
-    ]);
-    setIsModalVisible(false);
-    console.log("Goal added:", inputText);
+  const handleInputData = async (inputText) => {
+    const newGoal = { text: inputText };
+    try {
+      await addToDB("goals", newGoal);
+      setGoals((currentGoals) => [
+        ...currentGoals,
+        { id: Math.random(), text: inputText },
+      ]);
+      setIsModalVisible(false);
+      console.log("Goal added to database:", inputText);
+    } catch (error) {
+      console.error("Error adding goal to database:", error);
+      Alert.alert("Error", "Failed to add goal. Please try again.");
+    }
   };
 
   const handleModalDismiss = () => {
