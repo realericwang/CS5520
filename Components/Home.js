@@ -27,7 +27,10 @@ export default function Home({ navigation }) {
       let newArray = [];
       querySnapshot.forEach((docSnapshot) => {
         console.log(docSnapshot.id);
-        newArray.push(docSnapshot.data());
+        newArray.push({
+          text: docSnapshot.data().text,
+          id: docSnapshot.id,
+        });
       });
       setGoals(newArray);
     });
