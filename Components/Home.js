@@ -13,8 +13,11 @@ import Input from "./Input";
 import { useState } from "react";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
+import { app } from "../Firebase/firebaseSetup";
 
 export default function Home({ navigation }) {
+  console.log(app);
+
   const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "React Native NEU 5520";
@@ -89,7 +92,9 @@ export default function Home({ navigation }) {
               onPressOut={() => separators.unhighlight()}
             />
           )}
-          ItemSeparatorComponent={({ highlighted }) => <ItemSeparator highlighted={highlighted} />}
+          ItemSeparatorComponent={({ highlighted }) => (
+            <ItemSeparator highlighted={highlighted} />
+          )}
           ListEmptyComponent={
             <Text style={styles.emptyListText}>No goals to show</Text>
           }
@@ -126,7 +131,9 @@ export default function Home({ navigation }) {
 
 const ItemSeparator = ({ highlighted }) => (
   <View style={styles.separatorContainer}>
-    <View style={[styles.separator, highlighted && styles.highlightedSeparator]} />
+    <View
+      style={[styles.separator, highlighted && styles.highlightedSeparator]}
+    />
   </View>
 );
 
