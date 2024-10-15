@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PressableButton from "./PressableButton";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-export default function GoalItem({ item, onDelete }) {
+export default function GoalItem({ item, onDelete, onPressIn, onPressOut }) {
   const navigation = useNavigation();
 
   const handleDelete = () => {
@@ -15,10 +15,24 @@ export default function GoalItem({ item, onDelete }) {
     navigation.navigate("Details", { goalData: item });
   }
 
+  const handleLongPress = () => {
+    Alert.alert(
+      "Delete Goal",
+      `Are you sure you want to delete the goal "${item.text}"?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", onPress: handleDelete, style: "destructive" }
+      ]
+    );
+  };
+
   return (
     <View style={styles.textContainer}>
       <Pressable
         onPress={handlePress}
+        onLongPress={handleLongPress}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
         style={({ pressed }) => [
           styles.pressable,
           pressed && styles.pressedItem,
