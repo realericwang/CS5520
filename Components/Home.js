@@ -24,9 +24,12 @@ export default function Home({ navigation }) {
   // fetch goals from firestore
   useEffect(() => {
     onSnapshot(collection(database, "goals"), (querySnapshot) => {
+      let newArray = [];
       querySnapshot.forEach((docSnapshot) => {
-        console.log(docSnapshot.data());
+        console.log(docSnapshot.id);
+        newArray.push(docSnapshot.data());
       });
+      setGoals(newArray);
     });
   }, []);
 
@@ -34,10 +37,6 @@ export default function Home({ navigation }) {
     const newGoal = { text: inputText };
     try {
       await addToDB("goals", newGoal);
-      setGoals((currentGoals) => [
-        ...currentGoals,
-        { id: Math.random(), text: inputText },
-      ]);
       setIsModalVisible(false);
       console.log("Goal added to database:", inputText);
     } catch (error) {
