@@ -24,10 +24,9 @@ export default function Home({ navigation }) {
 
   // fetch goals from firestore
   useEffect(() => {
-    onSnapshot(collection(database, "goals"), (querySnapshot) => {
+    const unsubscribe = onSnapshot(collection(database, "goals"), (querySnapshot) => {
       let newArray = [];
       querySnapshot.forEach((docSnapshot) => {
-        // console.log(docSnapshot.id);
         newArray.push({
           text: docSnapshot.data().text,
           id: docSnapshot.id,
@@ -35,6 +34,9 @@ export default function Home({ navigation }) {
       });
       setGoals(newArray);
     });
+
+    // Cleanup function to detach the listener
+    return () => unsubscribe();
   }, []);
 
   const handleInputData = async (inputText) => {
