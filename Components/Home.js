@@ -13,10 +13,12 @@ import Input from "./Input";
 import { useState } from "react";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
-import { app } from "../Firebase/firebaseSetup";
+import { database } from "../Firebase/firebaseSetup";
+import { addToDB } from "../Firebase/firestoreHelper";
 
 export default function Home({ navigation }) {
-  console.log(app);
+  addToDB("goals", { name: "goal1" });
+  console.log(database);
 
   const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
