@@ -10,22 +10,43 @@ import {
 } from "react-native";
 import Header from "./Header";
 import Input from "./Input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
+import { addToDB, deleteFromDB, deleteAllFromDB } from "../Firebase/firestoreHelper";
+import { collection, onSnapshot } from "firebase/firestore";
+import { database } from "../Firebase/firebaseSetup";
 
 export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "React Native NEU 5520";
 
-  const handleInputData = (inputText) => {
-    setGoals((currentGoals) => [
-      ...currentGoals,
-      { id: Math.random(), text: inputText },
-    ]);
-    setIsModalVisible(false);
-    console.log("Goal added:", inputText);
+  // fetch goals from firestore
+  useEffect(() => {
+    onSnapshot(collection(database, "goals"), (querySnapshot) => {
+      let newArray = [];
+      querySnapshot.forEach((docSnapshot) => {
+        // console.log(docSnapshot.id);
+        newArray.push({
+          text: docSnapshot.data().text,
+          id: docSnapshot.id,
+        });
+      });
+      setGoals(newArray);
+    });
+  }, []);
+
+  const handleInputData = async (inputText) => {
+    const newGoal = { text: inputText };
+    try {
+      await addToDB("goals", newGoal);
+      setIsModalVisible(false);
+      console.log("Goal added to database:", inputText);
+    } catch (error) {
+      console.error("Error adding goal to database:", error);
+      Alert.alert("Error", "Failed to add goal. Please try again.");
+    }
   };
 
   const handleModalDismiss = () => {
@@ -33,7 +54,8 @@ export default function Home({ navigation }) {
   };
 
   function handleDelete(id) {
-    setGoals((currentGoals) => currentGoals.filter((goal) => goal.id !== id));
+    // setGoals((currentGoals) => currentGoals.filter((goal) => goal.id !== id));
+    deleteFromDB(id, "goals");
     console.log("Goal deleted:", id);
   }
 
@@ -46,20 +68,13 @@ export default function Home({ navigation }) {
         {
           text: "Yes",
           onPress: () => {
-            setGoals([]);
+            deleteAllFromDB("goals");
             console.log("All goals deleted");
           },
         },
       ],
     );
   };
-
-  function handleGoalPress(pressedGoal) {
-    //receive the goal obj
-    console.log(pressedGoal);
-    // navigate to GoalDetails and pass goal obj as params
-    navigation.navigate("Details", { goalData: pressedGoal });
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -89,7 +104,9 @@ export default function Home({ navigation }) {
               onPressOut={() => separators.unhighlight()}
             />
           )}
-          ItemSeparatorComponent={({ highlighted }) => <ItemSeparator highlighted={highlighted} />}
+          ItemSeparatorComponent={({ highlighted }) => (
+            <ItemSeparator highlighted={highlighted} />
+          )}
           ListEmptyComponent={
             <Text style={styles.emptyListText}>No goals to show</Text>
           }
@@ -126,7 +143,9 @@ export default function Home({ navigation }) {
 
 const ItemSeparator = ({ highlighted }) => (
   <View style={styles.separatorContainer}>
-    <View style={[styles.separator, highlighted && styles.highlightedSeparator]} />
+    <View
+      style={[styles.separator, highlighted && styles.highlightedSeparator]}
+    />
   </View>
 );
 

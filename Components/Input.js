@@ -117,13 +117,13 @@ export default function Input({
           )}
           {!isFocused && isSubmitted && renderFeedback()}
           <View style={styles.buttonContainer}>
+            <Button title="Cancel" onPress={handleCancel} color="red" />
+            <View style={styles.buttonSpacer} />
             <Button
               title="Confirm"
               onPress={handleConfirm}
               disabled={!isConfirmEnabled}
             />
-            <View style={styles.buttonSpacer} />
-            <Button title="Cancel" onPress={handleCancel} color="red" />
           </View>
         </View>
       </View>
