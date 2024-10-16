@@ -1,4 +1,12 @@
-import { addDoc, collection, deleteDoc, doc, query, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  query,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { database } from "./firebaseSetup";
 
 async function addToDB(collectionName, data) {
@@ -30,4 +38,14 @@ async function deleteAllFromDB(collectionName) {
   }
 }
 
-export { addToDB, deleteFromDB, deleteAllFromDB };
+async function updateWarningInDB(collectionName, docId, isWarning) {
+  try {
+    const docRef = doc(database, collectionName, docId);
+    await updateDoc(docRef, { warning: isWarning });
+    console.log(`Document ${docId} updated with warning: ${isWarning}`);
+  } catch (error) {
+    console.error("Error updating document: ", error);
+  }
+}
+
+export { addToDB, deleteFromDB, deleteAllFromDB, updateWarningInDB };

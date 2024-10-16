@@ -2,9 +2,26 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import React, { useState, useEffect } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import PressableButton from "./PressableButton";
+import { updateWarningInDB } from "../Firebase/firestoreHelper";
+import { doc, onSnapshot } from "firebase/firestore";
+import { database } from "../Firebase/firebaseSetup";
 
 export default function GoalDetails({ navigation, route }) {
   const [isWarning, setIsWarning] = useState(false);
+  const { goalData } = route.params;
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      doc(database, "goals", goalData.id),
+      (doc) => {
+        if (doc.exists()) {
+          setIsWarning(doc.data().warning || false);
+        }
+      },
+    );
+
+    return () => unsubscribe();
+  }, [goalData.id]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -23,39 +40,25 @@ export default function GoalDetails({ navigation, route }) {
         </PressableButton>
       ),
     });
-  }, [isWarning, navigation]);
+  }, [isWarning, navigation, toggleWarning]);
 
   function moreDetailsHandler() {
     navigation.push("Details");
   }
 
-  function toggleWarning() {
-    setIsWarning((prev) => !prev);
-    navigation.setOptions({
-      title: isWarning ? "More Details" : "Warning!",
-      headerRight: () => (
-        <PressableButton
-          pressedHandler={toggleWarning}
-          componentStyle={{ marginRight: 10 }}
-        >
-          <View style={styles.iconContainer}>
-            <AntDesign
-              name="warning"
-              size={24}
-              color={isWarning ? "green" : "red"}
-            />
-          </View>
-        </PressableButton>
-      ),
-    });
+  async function toggleWarning() {
+    const newWarningState = !isWarning;
+    setIsWarning(newWarningState);
+    await updateWarningInDB("goals", goalData.id, newWarningState);
   }
 
   return (
     <View>
       <Text style={[styles.text, isWarning && styles.warningText]}>
-        {route.params
-          ? `This is details of a goal with text ${route.params.goalData.text} and id ${route.params.goalData.id}`
-          : "More details"}
+        {`This is details of a goal with text ${goalData.text} and id ${goalData.id}`}
+      </Text>
+      <Text style={styles.warningStatus}>
+        Warning Status: {isWarning ? "Active" : "Inactive"}
       </Text>
       <Button title="More Details" onPress={moreDetailsHandler} />
     </View>
@@ -72,5 +75,10 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     backgroundColor: "transparent",
+  },
+  warningStatus: {
+    fontSize: 14,
+    marginBottom: 10,
+    fontStyle: "italic",
   },
 });
