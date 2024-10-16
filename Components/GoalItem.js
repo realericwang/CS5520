@@ -21,8 +21,8 @@ export default function GoalItem({ item, onDelete, onPressIn, onPressOut }) {
       `Are you sure you want to delete the goal "${item.text}"?`,
       [
         { text: "Cancel", style: "cancel" },
-        { text: "Delete", onPress: handleDelete, style: "destructive" }
-      ]
+        { text: "Delete", onPress: handleDelete, style: "destructive" },
+      ],
     );
   };
 
