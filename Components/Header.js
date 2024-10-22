@@ -1,5 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 import React from "react";
+
+const { width } = Dimensions.get('window');
 
 export default function Header({ title }) {
   return (
@@ -11,12 +13,13 @@ export default function Header({ title }) {
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 20,
-    marginBottom: 20,
+    width: '100%',
+    paddingVertical: '5%',
+    paddingHorizontal: '3%',
+    backgroundColor: '#f0f0f0',
   },
   headerText: {
-    fontSize: 20,
-    marginBottom: 20,
+    fontSize: width * 0.05,
     color: "red",
   },
 });
