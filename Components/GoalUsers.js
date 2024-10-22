@@ -1,21 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  addToSubcollection,
+  getSubcollectionDocs,
+} from "../Firebase/firestoreHelper";
 
-const GoalUsers = () => {
+const GoalUsers = ({ goalId }) => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(
-          "https://jsonplaceholder.typicode.com/users"
+        // Check if users data exists in the subcollection
+        const existingUsers = await getSubcollectionDocs(
+          "goals",
+          goalId,
+          "users",
         );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+
+        if (existingUsers.length > 0) {
+          setUsers(existingUsers);
+        } else {
+          // If no data in subcollection, fetch from API
+          const response = await fetch(
+            "https://jsonplaceholder.typicode.com/users",
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+
+          // Add fetched data to the subcollection
+          for (const user of data) {
+            await addToSubcollection("goals", goalId, "users", user);
+          }
+
+          setUsers(data);
         }
-        const data = await response.json();
-        setUsers(data);
       } catch (error) {
         console.error("Error fetching users:", error);
         setError("Failed to fetch users. Please try again later.");
@@ -23,7 +45,7 @@ const GoalUsers = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [goalId]);
 
   return (
     <View style={styles.container}>
@@ -58,7 +80,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 16,
   },
 });
