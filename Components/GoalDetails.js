@@ -5,6 +5,7 @@ import PressableButton from "./PressableButton";
 import { updateWarningInDB } from "../Firebase/firestoreHelper";
 import { doc, onSnapshot } from "firebase/firestore";
 import { database } from "../Firebase/firebaseSetup";
+import GoalUsers from './GoalUsers';
 
 export default function GoalDetails({ navigation, route }) {
   const [isWarning, setIsWarning] = useState(false);
@@ -61,6 +62,7 @@ export default function GoalDetails({ navigation, route }) {
         Warning Status: {isWarning ? "Active" : "Inactive"}
       </Text>
       <Button title="More Details" onPress={moreDetailsHandler} />
+      <GoalUsers />
     </View>
   );
 }
