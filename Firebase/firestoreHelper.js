@@ -48,4 +48,55 @@ async function updateWarningInDB(collectionName, docId, isWarning) {
   }
 }
 
-export { addToDB, deleteFromDB, deleteAllFromDB, updateWarningInDB };
+async function addToSubcollection(
+  parentCollectionName,
+  parentDocId,
+  subcollectionName,
+  data,
+) {
+  try {
+    const subcollectionRef = collection(
+      database,
+      parentCollectionName,
+      parentDocId,
+      subcollectionName,
+    );
+    const docRef = await addDoc(subcollectionRef, data);
+    console.log("Document written to subcollection with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error adding document to subcollection: ", error);
+  }
+}
+
+async function getSubcollectionDocs(
+  parentCollectionName,
+  parentDocId,
+  subcollectionName,
+) {
+  try {
+    const subcollectionRef = collection(
+      database,
+      parentCollectionName,
+      parentDocId,
+      subcollectionName,
+    );
+    const querySnapshot = await getDocs(subcollectionRef);
+    const docs = [];
+    querySnapshot.forEach((doc) => {
+      docs.push({ id: doc.id, ...doc.data() });
+    });
+    return docs;
+  } catch (error) {
+    console.error("Error getting subcollection documents: ", error);
+    return [];
+  }
+}
+
+export {
+  addToDB,
+  deleteFromDB,
+  deleteAllFromDB,
+  updateWarningInDB,
+  addToSubcollection,
+  getSubcollectionDocs,
+};
