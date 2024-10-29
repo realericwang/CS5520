@@ -25,42 +25,51 @@ export default function App() {
 
   if (initializing) return null;
 
+  const AuthStack = (
+    <>
+      <Stack.Screen 
+        name="Login" 
+        component={Login}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="Signup" 
+        component={Signup}
+        options={{ headerShown: false }}
+      />
+    </>
+  );
+
+  const AppStack = (
+    <>
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          title: "My Goals",
+          headerLeft: null,
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="Details"
+        component={GoalDetails}
+        options={({ route }) => ({
+          title: route.params ? route.params.goalData.text : "More Details",
+        })}
+      />
+    </>
+  );
+
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={user ? "Home" : "Login"}
         screenOptions={{
           headerStyle: { backgroundColor: "purple" },
           headerTintColor: "white",
         }}
       >
-        <Stack.Screen 
-          name="Login" 
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen 
-          name="Signup" 
-          component={Signup}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            title: "My Goals",
-            // Prevent going back to login/signup after authentication
-            headerLeft: null,
-            headerBackVisible: false,
-          }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={GoalDetails}
-          options={({ route }) => ({
-            title: route.params ? route.params.goalData.text : "More Details",
-          })}
-        />
+        {user ? AppStack : AuthStack}
       </Stack.Navigator>
     </NavigationContainer>
   );
