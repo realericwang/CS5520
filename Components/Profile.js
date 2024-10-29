@@ -1,18 +1,30 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { auth } from '../Firebase/firebaseSetup';
+import { AntDesign } from "@expo/vector-icons";
 import PressableButton from "./PressableButton";
+import { logout } from '../Firebase/authHelper';
 
 export default function Profile({ navigation }) {
   const currentUser = auth.currentUser;
 
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <PressableButton
+          pressedHandler={async () => {
+            const { error } = await logout();
+            if (error) {
+              console.error("Error signing out:", error);
+            }
+          }}
+          componentStyle={styles.logoutButton}
+        >
+          <AntDesign name="logout" size={24} color="white" />
+        </PressableButton>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -25,12 +37,6 @@ export default function Profile({ navigation }) {
         <Text style={styles.label}>User ID:</Text>
         <Text style={styles.value}>{currentUser?.uid}</Text>
       </View>
-      <PressableButton
-        pressedHandler={handleLogout}
-        componentStyle={styles.logoutButton}
-      >
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </PressableButton>
     </View>
   );
 }
@@ -60,15 +66,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   logoutButton: {
-    backgroundColor: "#dc3545",
-    padding: 15,
-    borderRadius: 6,
-    marginTop: 30,
-  },
-  logoutButtonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
+    marginRight: 10,
+    backgroundColor: 'transparent',
+  }
 });
