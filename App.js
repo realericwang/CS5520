@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, StyleSheet } from "react";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
@@ -7,6 +7,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GoalDetails from "./Components/GoalDetails";
 import { auth } from './Firebase/firebaseSetup';
 import { onAuthStateChanged } from 'firebase/auth';
+import Profile from "./Components/Profile";
+import { AntDesign } from "@expo/vector-icons";
+import PressableButton from "./Components/PressableButton";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,10 +48,25 @@ export default function App() {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{
+        options={({ navigation }) => ({
           title: "My Goals",
           headerLeft: null,
           headerBackVisible: false,
+          headerRight: () => (
+            <PressableButton
+              pressedHandler={() => navigation.navigate("Profile")}
+              componentStyle={styles.profileButton}
+            >
+              <AntDesign name="user" size={24} color="white" />
+            </PressableButton>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          title: "My Profile",
         }}
       />
       <Stack.Screen
@@ -74,3 +92,10 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  profileButton: {
+    marginRight: 10,
+    backgroundColor: "purple",
+  },
+});
