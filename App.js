@@ -5,8 +5,8 @@ import Signup from "./Components/Signup";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GoalDetails from "./Components/GoalDetails";
-import { auth } from './Firebase/firebaseSetup';
-import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from "./Firebase/firebaseSetup";
+import { onAuthStateChanged } from "firebase/auth";
 import Profile from "./Components/Profile";
 import { AntDesign } from "@expo/vector-icons";
 import PressableButton from "./Components/PressableButton";
@@ -30,13 +30,13 @@ export default function App() {
 
   const AuthStack = (
     <>
-      <Stack.Screen 
-        name="Login" 
+      <Stack.Screen
+        name="Login"
         component={Login}
         options={{ headerShown: false }}
       />
-      <Stack.Screen 
-        name="Signup" 
+      <Stack.Screen
+        name="Signup"
         component={Signup}
         options={{ headerShown: false }}
       />
@@ -48,19 +48,11 @@ export default function App() {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={({ navigation }) => ({
+        options={{
           title: "My Goals",
           headerLeft: null,
           headerBackVisible: false,
-          headerRight: () => (
-            <PressableButton
-              pressedHandler={() => navigation.navigate("Profile")}
-              componentStyle={styles.profileButton}
-            >
-              <AntDesign name="user" size={24} color="white" />
-            </PressableButton>
-          ),
-        })}
+        }}
       />
       <Stack.Screen
         name="Profile"
@@ -92,10 +84,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  profileButton: {
-    marginRight: 10,
-    backgroundColor: "purple",
-  },
-});

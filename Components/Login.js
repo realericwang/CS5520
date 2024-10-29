@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Alert } from "react-native";
 import React, { useState } from "react";
 import PressableButton from "./PressableButton";
-import { login } from '../Firebase/authHelper';
+import { login } from "../Firebase/authHelper";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -52,17 +52,17 @@ export default function Login({ navigation }) {
       <View style={styles.buttonContainer}>
         <PressableButton
           pressedHandler={handleLogin}
-          componentStyle={[
-            styles.button,
-            isLoading && styles.buttonDisabled
-          ]}
+          componentStyle={[styles.button, isLoading && styles.buttonDisabled]}
           disabled={isLoading}
         >
           <Text style={styles.buttonText}>
             {isLoading ? "Logging in..." : "Login"}
           </Text>
         </PressableButton>
-        <Text style={styles.linkText} onPress={() => navigation.navigate("Signup")}>
+        <Text
+          style={styles.linkText}
+          onPress={() => navigation.navigate("Signup")}
+        >
           Don't have an account? Sign up
         </Text>
       </View>

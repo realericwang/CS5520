@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
-import { auth } from '../Firebase/firebaseSetup';
+import { auth } from "../Firebase/firebaseSetup";
 import { AntDesign } from "@expo/vector-icons";
 import PressableButton from "./PressableButton";
-import { logout } from '../Firebase/authHelper';
+import { logout } from "../Firebase/authHelper";
 
 export default function Profile({ navigation }) {
   const currentUser = auth.currentUser;
@@ -67,6 +67,6 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginRight: 10,
-    backgroundColor: 'transparent',
-  }
+    backgroundColor: "transparent",
+  },
 });

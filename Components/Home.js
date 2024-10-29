@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Header from "./Header";
 import Input from "./Input";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
 import {
@@ -20,11 +20,25 @@ import {
 } from "../Firebase/firestoreHelper";
 import { collection, onSnapshot } from "firebase/firestore";
 import { database } from "../Firebase/firebaseSetup";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const appName = "React Native NEU 5520";
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <PressableButton
+          pressedHandler={() => navigation.navigate("Profile")}
+          componentStyle={styles.profileButton}
+        >
+          <AntDesign name="user" size={24} color="white" />
+        </PressableButton>
+      ),
+    });
+  }, [navigation]);
 
   // fetch goals from firestore
   useEffect(() => {
@@ -231,5 +245,9 @@ const styles = StyleSheet.create({
   },
   highlightedSeparator: {
     backgroundColor: "#4a69bd",
+  },
+  profileButton: {
+    marginRight: 10,
+    backgroundColor: "transparent",
   },
 });

@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, TextInput, Alert } from "react-native";
 import React, { useState } from "react";
 import PressableButton from "./PressableButton";
-import { auth } from '../Firebase/firebaseSetup';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from "../Firebase/firebaseSetup";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Signup({ navigation }) {
   const [email, setEmail] = useState("");
@@ -22,34 +22,39 @@ export default function Signup({ navigation }) {
 
     setIsLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       console.log("User created:", userCredential.user.uid);
-      
+
       // Clear form
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-      
+
       // Navigate to Home screen
       navigation.replace("Home");
     } catch (error) {
       let errorMessage = "Failed to create account";
-      
+
       switch (error.code) {
-        case 'auth/email-already-in-use':
+        case "auth/email-already-in-use":
           errorMessage = "This email is already registered";
           break;
-        case 'auth/invalid-email':
+        case "auth/invalid-email":
           errorMessage = "Invalid email address";
           break;
-        case 'auth/weak-password':
+        case "auth/weak-password":
           errorMessage = "Password should be at least 6 characters";
           break;
-        case 'auth/operation-not-allowed':
-          errorMessage = "Email/password accounts are not enabled. Please contact support.";
+        case "auth/operation-not-allowed":
+          errorMessage =
+            "Email/password accounts are not enabled. Please contact support.";
           break;
       }
-      
+
       Alert.alert("Error", errorMessage);
     } finally {
       setIsLoading(false);
@@ -94,8 +99,8 @@ export default function Signup({ navigation }) {
             {isLoading ? "Creating Account..." : "Sign Up"}
           </Text>
         </PressableButton>
-        <Text 
-          style={styles.linkText} 
+        <Text
+          style={styles.linkText}
           onPress={() => navigation.navigate("Login")}
         >
           Already have an account? Login
