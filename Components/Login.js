@@ -39,6 +39,7 @@ export default function Login({ navigation }) {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        editable={!isLoading}
       />
       <TextInput
         style={styles.input}
@@ -46,6 +47,7 @@ export default function Login({ navigation }) {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        editable={!isLoading}
       />
       <View style={styles.buttonContainer}>
         <PressableButton
