@@ -18,7 +18,7 @@ import {
   deleteFromDB,
   deleteAllFromDB,
 } from "../Firebase/firestoreHelper";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { database } from "../Firebase/firebaseSetup";
 import { AntDesign } from "@expo/vector-icons";
 import { auth } from "../Firebase/firebaseSetup";
@@ -45,7 +45,10 @@ export default function Home({ navigation }) {
   useEffect(() => {
     try {
       const unsubscribe = onSnapshot(
-        collection(database, "goals"),
+        query(
+          collection(database, "goals"),
+          where("owner", "==", auth.currentUser?.uid),
+        ),
         (querySnapshot) => {
           let newArray = [];
           querySnapshot.forEach((docSnapshot) => {
@@ -62,9 +65,9 @@ export default function Home({ navigation }) {
             "Error",
             error.code === "permission-denied"
               ? "You don't have permission to view goals. Please make sure you're logged in."
-              : "Failed to load goals. Please try again later."
+              : "Failed to load goals. Please try again later.",
           );
-        }
+        },
       );
 
       return () => unsubscribe();
@@ -72,7 +75,7 @@ export default function Home({ navigation }) {
       console.error("Firestore setup error:", error);
       Alert.alert(
         "Error",
-        "Failed to connect to the database. Please check your connection."
+        "Failed to connect to the database. Please check your connection.",
       );
     }
   }, []);
