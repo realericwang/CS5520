@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
+import ImageManager from './ImageManager';
 
 export default function Input({
   autoFocus = false,
@@ -20,6 +21,7 @@ export default function Input({
   const [isFocused, setIsFocused] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isConfirmEnabled, setIsConfirmEnabled] = useState(false);
+  const [imageUri, setImageUri] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -31,6 +33,7 @@ export default function Input({
   useEffect(() => {
     if (visible) {
       setText("");
+      setImageUri(null);
       setIsConfirmEnabled(false);
       setIsFocused(false);
       setIsSubmitted(false);
@@ -60,8 +63,12 @@ export default function Input({
   };
 
   const handleConfirm = () => {
-    inputHandler(text);
+    inputHandler({
+      text: text,
+      imageUri: imageUri
+    });
     setText("");
+    setImageUri(null);
     setIsConfirmEnabled(false);
     onDismiss();
   };
@@ -78,6 +85,10 @@ export default function Input({
         },
       },
     ]);
+  };
+
+  const handleImageTaken = (uri) => {
+    setImageUri(uri);
   };
 
   return (
@@ -116,6 +127,7 @@ export default function Input({
             </Text>
           )}
           {!isFocused && isSubmitted && renderFeedback()}
+          <ImageManager onImageTaken={handleImageTaken} />
           <View style={styles.buttonContainer}>
             <Button title="Cancel" onPress={handleCancel} color="red" />
             <View style={styles.buttonSpacer} />

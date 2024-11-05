@@ -18,9 +18,10 @@ import {
   deleteFromDB,
   deleteAllFromDB,
 } from "../Firebase/firestoreHelper";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { database } from "../Firebase/firebaseSetup";
 import { AntDesign } from "@expo/vector-icons";
+import { auth } from "../Firebase/firebaseSetup";
 
 export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
@@ -42,33 +43,68 @@ export default function Home({ navigation }) {
 
   // fetch goals from firestore
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(database, "goals"),
-      (querySnapshot) => {
-        let newArray = [];
-        querySnapshot.forEach((docSnapshot) => {
-          newArray.push({
-            text: docSnapshot.data().text,
-            id: docSnapshot.id,
+    try {
+      const unsubscribe = onSnapshot(
+        query(
+          collection(database, "goals"),
+          where("owner", "==", auth.currentUser?.uid),
+        ),
+        (querySnapshot) => {
+          let newArray = [];
+          querySnapshot.forEach((docSnapshot) => {
+            newArray.push({
+              text: docSnapshot.data().text,
+              id: docSnapshot.id,
+            });
           });
-        });
-        setGoals(newArray);
-      },
-    );
+          setGoals(newArray);
+        },
+        (error) => {
+          console.error("Firestore subscription error:", error);
+          Alert.alert(
+            "Error",
+            error.code === "permission-denied"
+              ? "You don't have permission to view goals. Please make sure you're logged in."
+              : "Failed to load goals. Please try again later.",
+          );
+        },
+      );
 
-    // Cleanup function to detach the listener
-    return () => unsubscribe();
+      return () => unsubscribe();
+    } catch (error) {
+      console.error("Firestore setup error:", error);
+      Alert.alert(
+        "Error",
+        "Failed to connect to the database. Please check your connection.",
+      );
+    }
   }, []);
 
-  const handleInputData = async (inputText) => {
-    const newGoal = { text: inputText };
+  const handleInputData = async (inputData) => {
+    if (!auth.currentUser) {
+      Alert.alert("Error", "You must be logged in to add goals");
+      return;
+    }
+
+    const newGoal = {
+      text: inputData.text,
+      imageUri: inputData.imageUri,
+      owner: auth.currentUser.uid,
+      createdAt: new Date().toISOString(),
+    };
+
     try {
       await addToDB("goals", newGoal);
       setIsModalVisible(false);
-      console.log("Goal added to database:", inputText);
+      console.log("Goal added to database:", newGoal);
     } catch (error) {
       console.error("Error adding goal to database:", error);
-      Alert.alert("Error", "Failed to add goal. Please try again.");
+      Alert.alert(
+        "Error",
+        error.code === "permission-denied"
+          ? "You don't have permission to add goals"
+          : "Failed to add goal. Please try again.",
+      );
     }
   };
 
