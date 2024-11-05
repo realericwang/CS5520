@@ -2,7 +2,7 @@ import { View, Button, StyleSheet, Alert, Image } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 
-export default function ImageManager() {
+export default function ImageManager({ onImageTaken }) {
   const [response, requestPermission] = ImagePicker.useCameraPermissions();
   const [imageUri, setImageUri] = useState(null);
 
@@ -43,8 +43,10 @@ export default function ImageManager() {
       });
 
       if (!result.canceled) {
-        console.log("Image captured:", result.assets[0].uri);
-        setImageUri(result.assets[0].uri);
+        const uri = result.assets[0].uri;
+        console.log("Image captured:", uri);
+        setImageUri(uri);
+        onImageTaken(uri);
       }
     } catch (err) {
       console.log("Error taking picture:", err);

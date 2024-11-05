@@ -80,14 +80,15 @@ export default function Home({ navigation }) {
     }
   }, []);
 
-  const handleInputData = async (inputText) => {
+  const handleInputData = async (inputData) => {
     if (!auth.currentUser) {
       Alert.alert("Error", "You must be logged in to add goals");
       return;
     }
 
     const newGoal = {
-      text: inputText,
+      text: inputData.text,
+      imageUri: inputData.imageUri,
       owner: auth.currentUser.uid,
       createdAt: new Date().toISOString(),
     };
@@ -95,7 +96,7 @@ export default function Home({ navigation }) {
     try {
       await addToDB("goals", newGoal);
       setIsModalVisible(false);
-      console.log("Goal added to database:", inputText);
+      console.log("Goal added to database:", newGoal);
     } catch (error) {
       console.error("Error adding goal to database:", error);
       Alert.alert(
