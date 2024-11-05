@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
+import ImageManager from './ImageManager';
 
 export default function Input({
   autoFocus = false,
@@ -116,6 +117,7 @@ export default function Input({
             </Text>
           )}
           {!isFocused && isSubmitted && renderFeedback()}
+          <ImageManager />
           <View style={styles.buttonContainer}>
             <Button title="Cancel" onPress={handleCancel} color="red" />
             <View style={styles.buttonSpacer} />
