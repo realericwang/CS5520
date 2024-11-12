@@ -22,6 +22,8 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { database } from "../Firebase/firebaseSetup";
 import { AntDesign } from "@expo/vector-icons";
 import { auth } from "../Firebase/firebaseSetup";
+import { ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../Firebase/firebaseSetup";
 
 export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
@@ -86,9 +88,29 @@ export default function Home({ navigation }) {
       return;
     }
 
+    let imageUri = null;
+    
+    // Handle image upload if imageUri exists
+    if (inputData.imageUri) {
+      try {
+        const response = await fetch(inputData.imageUri);
+        const blob = await response.blob();
+        
+        const imageName = inputData.imageUri.substring(inputData.imageUri.lastIndexOf('/') + 1);
+        const imageRef = ref(storage, `images/${imageName}`);
+        const uploadResult = await uploadBytesResumable(imageRef, blob);
+        
+        imageUri = uploadResult.metadata.fullPath;
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        Alert.alert("Error", "Failed to upload image. Please try again.");
+        return;
+      }
+    }
+
     const newGoal = {
       text: inputData.text,
-      imageUri: inputData.imageUri,
+      imageUri: imageUri,
       owner: auth.currentUser.uid,
       createdAt: new Date().toISOString(),
     };

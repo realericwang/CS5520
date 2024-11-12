@@ -65,7 +65,7 @@ export default function App() {
         name="Details"
         component={GoalDetails}
         options={({ route }) => ({
-          title: route.params ? route.params.goalData.text : "More Details",
+          title: route.params?.goalData?.text || "Goal Details",
         })}
       />
     </>

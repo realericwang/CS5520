@@ -39,7 +39,7 @@ export default function ImageManager({ onImageTaken }) {
       const result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         aspect: [16, 9],
-        quality: 0.5,
+        quality: 0.1,
       });
 
       if (!result.canceled) {
