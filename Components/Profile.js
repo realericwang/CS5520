@@ -38,7 +38,7 @@ export default function Profile({ navigation }) {
         <Text style={styles.label}>User ID:</Text>
         <Text style={styles.value}>{currentUser?.uid}</Text>
       </View>
-      <LocationManager />
+      <LocationManager navigation={navigation} />
     </View>
   );
 }
