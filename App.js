@@ -10,6 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Profile from "./Components/Profile";
 import { AntDesign } from "@expo/vector-icons";
 import PressableButton from "./Components/PressableButton";
+import Map from "./Components/Map";
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +68,13 @@ export default function App() {
         options={({ route }) => ({
           title: route.params?.goalData?.text || "Goal Details",
         })}
+      />
+      <Stack.Screen
+        name="Map"
+        component={Map}
+        options={{
+          title: "Location Map",
+        }}
       />
     </>
   );

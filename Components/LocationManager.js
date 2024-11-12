@@ -2,7 +2,7 @@ import { View, Button, StyleSheet, Alert, Image } from "react-native";
 import React, { useState } from "react";
 import * as Location from "expo-location";
 
-export default function LocationManager() {
+export default function LocationManager({ navigation }) {
   const [isLocating, setIsLocating] = useState(false);
   const [location, setLocation] = useState(null);
   const [response, requestPermission] = Location.useForegroundPermissions();
@@ -45,11 +45,6 @@ export default function LocationManager() {
         latitude: locationResult.coords.latitude,
         longitude: locationResult.coords.longitude,
       });
-
-      Alert.alert(
-        "Location Found",
-        `Latitude: ${locationResult.coords.latitude}\nLongitude: ${locationResult.coords.longitude}`,
-      );
     } catch (err) {
       console.error("Error getting location:", err);
       Alert.alert(
@@ -69,12 +64,23 @@ export default function LocationManager() {
         disabled={isLocating}
       />
       {location && (
-        <Image
-          style={styles.map}
-          source={{
-            uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${mapsApiKey}`,
-          }}
-        />
+        <>
+          <Image
+            style={styles.map}
+            source={{
+              uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${mapsApiKey}`,
+            }}
+          />
+          <Button
+            title="Open in Map"
+            onPress={() =>
+              navigation.navigate("Map", {
+                latitude: location.latitude,
+                longitude: location.longitude,
+              })
+            }
+          />
+        </>
       )}
     </View>
   );
