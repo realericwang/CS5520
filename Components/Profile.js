@@ -4,6 +4,7 @@ import { auth } from "../Firebase/firebaseSetup";
 import { AntDesign } from "@expo/vector-icons";
 import PressableButton from "./PressableButton";
 import { logout } from "../Firebase/authHelper";
+import LocationManager from "./LocationManager";
 
 export default function Profile({ navigation }) {
   const currentUser = auth.currentUser;
@@ -37,6 +38,7 @@ export default function Profile({ navigation }) {
         <Text style={styles.label}>User ID:</Text>
         <Text style={styles.value}>{currentUser?.uid}</Text>
       </View>
+      <LocationManager />
     </View>
   );
 }
