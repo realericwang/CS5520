@@ -38,3 +38,6 @@ yarn-error.*
 # Prettier ignore file
 .prettierignore
 .prettierrc
+
+# VSCode
+.vscode/
