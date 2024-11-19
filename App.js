@@ -11,6 +11,15 @@ import Profile from "./Components/Profile";
 import { AntDesign } from "@expo/vector-icons";
 import PressableButton from "./Components/PressableButton";
 import Map from "./Components/Map";
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 const Stack = createNativeStackNavigator();
 

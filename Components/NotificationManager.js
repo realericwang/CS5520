@@ -34,18 +34,12 @@ export default function NotificationManager() {
         content: {
           title: "Goal Reminder",
           body: "First goal reminder",
-          data: { screen: "Home" },
         },
         trigger: {
-          seconds: 3, 
+          seconds: 5,
+          repeats: false
         },
       });
-      
-      Alert.alert(
-        "Success",
-        "Reminder set successfully!",
-        [{ text: "OK" }]
-      );
       
       console.log("Scheduled notification:", notificationId);
     } catch (error) {
