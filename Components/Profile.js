@@ -5,8 +5,9 @@ import { AntDesign } from "@expo/vector-icons";
 import PressableButton from "./PressableButton";
 import { logout } from "../Firebase/authHelper";
 import LocationManager from "./LocationManager";
+import NotificationManager from "./NotificationManager";
 
-export default function Profile({ navigation }) {
+export default function Profile({ navigation, route }) {
   const currentUser = auth.currentUser;
 
   useEffect(() => {
@@ -38,7 +39,8 @@ export default function Profile({ navigation }) {
         <Text style={styles.label}>User ID:</Text>
         <Text style={styles.value}>{currentUser?.uid}</Text>
       </View>
-      <LocationManager navigation={navigation} />
+      <LocationManager />
+      <NotificationManager />
     </View>
   );
 }

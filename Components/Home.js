@@ -24,6 +24,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { auth } from "../Firebase/firebaseSetup";
 import { ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../Firebase/firebaseSetup";
+import * as Notifications from 'expo-notifications';
 
 export default function Home({ navigation }) {
   const [goals, setGoals] = useState([]);
@@ -80,6 +81,40 @@ export default function Home({ navigation }) {
         "Failed to connect to the database. Please check your connection.",
       );
     }
+  }, []);
+
+  useEffect(() => {
+    const getNotificationToken = async () => {
+      try {
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status !== 'granted') {
+          const { status: newStatus } = await Notifications.requestPermissionsAsync();
+          if (newStatus !== 'granted') {
+            Alert.alert(
+              'Permission Required',
+              'Push notifications are required for this feature'
+            );
+            return;
+          }
+        }
+
+        const tokenData = await Notifications.getExpoPushTokenAsync({
+          projectId: process.env.EXPO_PUBLIC_PROJECT_ID
+        });
+        console.log('Expo Push Token:', tokenData.data);
+        
+        // Here store the token 
+        
+      } catch (error) {
+        console.error('Error getting push token:', error);
+        Alert.alert(
+          'Error',
+          'Failed to set up push notifications. Please try again later.'
+        );
+      }
+    };
+
+    // getNotificationToken();
   }, []);
 
   const handleInputData = async (inputData) => {

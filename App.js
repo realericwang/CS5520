@@ -11,6 +11,15 @@ import Profile from "./Components/Profile";
 import { AntDesign } from "@expo/vector-icons";
 import PressableButton from "./Components/PressableButton";
 import Map from "./Components/Map";
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +34,19 @@ export default function App() {
     });
 
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(
+      notification => {
+        const { title, body } = notification.request.content;
+        console.log('Notification received:');
+        console.log('Title:', title);
+        console.log('Body:', body);
+      }
+    );
+
+    return () => subscription.remove();
   }, []);
 
   if (initializing) return null;

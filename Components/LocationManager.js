@@ -1,86 +1,120 @@
-import { View, Button, StyleSheet, Alert, Image } from "react-native";
-import React, { useState } from "react";
+import {
+  Alert,
+  Button,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import * as Location from "expo-location";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { getUserLocation, saveUserLocation } from "../Firebase/firestoreHelper";
+import { auth } from "../Firebase/firebaseSetup";
 
-export default function LocationManager({ navigation }) {
-  const [isLocating, setIsLocating] = useState(false);
+const windowWidth = Dimensions.get("window").width;
+
+export default function LocationManager() {
+  const navigation = useNavigation();
+  const route = useRoute();
   const [location, setLocation] = useState(null);
   const [response, requestPermission] = Location.useForegroundPermissions();
 
-  const mapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
+  useEffect(() => {
+    async function fetchLocation() {
+      const locationData = await getUserLocation(auth.currentUser.uid);
+      if (locationData) {
+        setLocation(locationData);
+      }
+    }
+    fetchLocation();
+  }, []);
+
+  useEffect(() => {
+    if (route.params?.selectedLocation) {
+      setLocation(route.params.selectedLocation);
+    }
+  }, [route]);
+
+  async function saveLocationHandler() {
+    try {
+      if (!location) {
+        Alert.alert("Error", "No location selected");
+        return;
+      }
+
+      const success = await saveUserLocation(auth.currentUser.uid, location);
+
+      if (success) {
+        Alert.alert("Success", "Location saved successfully");
+        navigation.navigate("Home");
+      } else {
+        Alert.alert("Error", "Failed to save location");
+      }
+    } catch (error) {
+      console.error("Error saving location:", error);
+      Alert.alert("Error", "An error occurred while saving location");
+    }
+  }
 
   async function verifyPermission() {
     try {
-      if (!response || !response.granted) {
-        const permissionResponse = await requestPermission();
-        if (!permissionResponse.granted) {
-          Alert.alert(
-            "Permission Required",
-            "You need to grant location permissions to use this feature.",
-          );
-          return false;
-        }
+      if (response.granted) {
+        return true;
       }
-      return true;
+      const permissionResponse = await requestPermission();
+      return permissionResponse.granted;
     } catch (err) {
-      console.log("Error verifying permission:", err);
+      console.log("verify permission ", err);
       return false;
     }
   }
 
-  const locateUserHandler = async () => {
+  async function locateUserHandler() {
     try {
-      setIsLocating(true);
       const hasPermission = await verifyPermission();
-
       if (!hasPermission) {
+        Alert.alert("You need to give location permission");
         return;
       }
-
-      const locationResult = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-
+      const response = await Location.getCurrentPositionAsync();
       setLocation({
-        latitude: locationResult.coords.latitude,
-        longitude: locationResult.coords.longitude,
+        latitude: response.coords.latitude,
+        longitude: response.coords.longitude,
       });
     } catch (err) {
-      console.error("Error getting location:", err);
-      Alert.alert(
-        "Error",
-        "Failed to get location. Please check your settings and try again.",
-      );
-    } finally {
-      setIsLocating(false);
+      console.log("locate user ", err);
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
-      <Button
-        title={isLocating ? "Getting Location..." : "Get Current Location"}
-        onPress={locateUserHandler}
-        disabled={isLocating}
-      />
+      <View style={styles.buttonContainer}>
+        <Button title="Locate Me" onPress={locateUserHandler} />
+        <Button
+          title="Choose on Map"
+          onPress={() => navigation.navigate("Map")}
+        />
+        {location && (
+          <Button title="Save Location" onPress={saveLocationHandler} />
+        )}
+      </View>
+
       {location && (
-        <>
+        <View style={styles.mapContainer}>
           <Image
-            style={styles.map}
+            style={styles.mapImage}
             source={{
-              uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${mapsApiKey}`,
+              uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`,
             }}
           />
-          <Button
-            title="Open in Map"
-            onPress={() =>
-              navigation.navigate("Map", {
-                latitude: location.latitude,
-                longitude: location.longitude,
-              })
-            }
-          />
-        </>
+          <Text style={styles.coordinatesText}>
+            Latitude: {location.latitude.toFixed(4)}
+            {"\n"}
+            Longitude: {location.longitude.toFixed(4)}
+          </Text>
+        </View>
       )}
     </View>
   );
@@ -90,12 +124,28 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     alignItems: "center",
-    width: "100%",
   },
-  map: {
+  buttonContainer: {
+    flexDirection: "column",
+    gap: 10,
+    marginBottom: 20,
+  },
+  mapContainer: {
+    width: windowWidth - 40,
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+    borderRadius: 10,
+  },
+  mapImage: {
     width: "100%",
     height: 200,
-    marginTop: 20,
-    borderRadius: 10,
+    borderRadius: 8,
+  },
+  coordinatesText: {
+    marginTop: 10,
+    textAlign: "center",
+    fontSize: 16,
+    color: "#666",
   },
 });
