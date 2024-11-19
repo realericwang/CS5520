@@ -36,6 +36,19 @@ export default function App() {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(
+      notification => {
+        const { title, body } = notification.request.content;
+        console.log('Notification received:');
+        console.log('Title:', title);
+        console.log('Body:', body);
+      }
+    );
+
+    return () => subscription.remove();
+  }, []);
+
   if (initializing) return null;
 
   const AuthStack = (
