@@ -6,8 +6,9 @@ import PressableButton from "./PressableButton";
 import { logout } from "../Firebase/authHelper";
 import LocationManager from "./LocationManager";
 
-export default function Profile({ navigation }) {
+export default function Profile({ navigation, route }) {
   const currentUser = auth.currentUser;
+  const selectedLocation = route.params?.selectedLocation;
 
   useEffect(() => {
     navigation.setOptions({
