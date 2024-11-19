@@ -1,13 +1,19 @@
 import { View, Button, StyleSheet, Alert, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as Location from "expo-location";
 
-export default function LocationManager({ navigation }) {
+export default function LocationManager({ navigation, route }) {
   const [isLocating, setIsLocating] = useState(false);
   const [location, setLocation] = useState(null);
   const [response, requestPermission] = Location.useForegroundPermissions();
 
   const mapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+  useEffect(() => {
+    if (route?.params?.selectedLocation) {
+      setLocation(route.params.selectedLocation);
+    }
+  }, [route?.params?.selectedLocation]);
 
   async function verifyPermission() {
     try {
