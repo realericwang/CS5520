@@ -114,7 +114,7 @@ export default function Home({ navigation }) {
       }
     };
 
-    getNotificationToken();
+    // getNotificationToken();
   }, []);
 
   const handleInputData = async (inputData) => {
