@@ -11,7 +11,10 @@ export default function Map({ route, navigation }) {
 
   const handleLocationSelect = () => {
     navigation.navigate("Profile", {
-      selectedLocation: selectedLocation
+      screen: "Profile",
+      params: {
+        selectedLocation: selectedLocation
+      }
     });
   };
 

@@ -39,7 +39,7 @@ export default function Profile({ navigation, route }) {
         <Text style={styles.label}>User ID:</Text>
         <Text style={styles.value}>{currentUser?.uid}</Text>
       </View>
-      <LocationManager navigation={navigation} />
+      <LocationManager navigation={navigation} route={route} />
     </View>
   );
 }
