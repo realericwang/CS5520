@@ -1,6 +1,8 @@
 import { View, Button, StyleSheet, Alert, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as Location from "expo-location";
+import { auth } from "../Firebase/firebaseSetup";
+import { saveUserLocation, getUserLocation } from "../Firebase/firestoreHelper";
 
 export default function LocationManager({ navigation, route }) {
   const [isLocating, setIsLocating] = useState(false);
@@ -10,8 +12,19 @@ export default function LocationManager({ navigation, route }) {
   const mapsApiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
+    async function fetchSavedLocation() {
+      if (auth.currentUser) {
+        const savedLocation = await getUserLocation(auth.currentUser.uid);
+        if (savedLocation) {
+          setLocation(savedLocation);
+        }
+      }
+    }
+
     if (route?.params?.selectedLocation) {
       setLocation(route.params.selectedLocation);
+    } else {
+      fetchSavedLocation();
     }
   }, [route?.params?.selectedLocation]);
 
@@ -62,12 +75,37 @@ export default function LocationManager({ navigation, route }) {
     }
   };
 
+  const saveLocationHandler = async () => {
+    if (!location) {
+      Alert.alert("Error", "Please get your location first");
+      return;
+    }
+
+    if (!auth.currentUser) {
+      Alert.alert("Error", "You must be logged in to save your location");
+      return;
+    }
+
+    const success = await saveUserLocation(auth.currentUser.uid, location);
+    
+    if (success) {
+      Alert.alert("Success", "Location saved successfully");
+    } else {
+      Alert.alert("Error", "Failed to save location");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Button
         title={isLocating ? "Getting Location..." : "Get Current Location"}
         onPress={locateUserHandler}
         disabled={isLocating}
+      />
+      <View style={styles.buttonSpacer} />
+      <Button
+        title="Let me choose on the map"
+        onPress={() => navigation.navigate("Map")}
       />
       {location && (
         <>
@@ -77,15 +115,22 @@ export default function LocationManager({ navigation, route }) {
               uri: `https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:L%7C${location.latitude},${location.longitude}&key=${mapsApiKey}`,
             }}
           />
-          <Button
-            title="Open in Map"
-            onPress={() =>
-              navigation.navigate("Map", {
-                latitude: location.latitude,
-                longitude: location.longitude,
-              })
-            }
-          />
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Open in Map"
+              onPress={() =>
+                navigation.navigate("Map", {
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                })
+              }
+            />
+            <View style={styles.buttonSpacer} />
+            <Button 
+              title="Save Location" 
+              onPress={saveLocationHandler}
+            />
+          </View>
         </>
       )}
     </View>
@@ -104,4 +149,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 10,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: 20,
+  },
+  buttonSpacer: {
+    height: 10,
+  }
 });

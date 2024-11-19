@@ -6,6 +6,8 @@ import {
   query,
   getDocs,
   updateDoc,
+  setDoc,
+  getDoc,
 } from "firebase/firestore";
 import { database } from "./firebaseSetup";
 
@@ -92,6 +94,36 @@ async function getSubcollectionDocs(
   }
 }
 
+async function saveUserLocation(userId, locationData) {
+  try {
+    await setDoc(doc(database, "users", userId), {
+      location: locationData
+    }, { merge: true });
+    console.log("Location saved for user:", userId);
+    return true;
+  } catch (error) {
+    console.error("Error saving location:", error);
+    return false;
+  }
+}
+
+async function getUserLocation(userId) {
+  try {
+    const docRef = doc(database, "users", userId);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return docSnap.data().location;
+    } else {
+      console.log("No location data found for user:", userId);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting user location:", error);
+    return null;
+  }
+}
+
 export {
   addToDB,
   deleteFromDB,
@@ -99,4 +131,6 @@ export {
   updateWarningInDB,
   addToSubcollection,
   getSubcollectionDocs,
+  saveUserLocation,
+  getUserLocation,
 };
