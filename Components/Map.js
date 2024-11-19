@@ -1,25 +1,16 @@
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, Text, Button } from "react-native";
 import React, { useState } from "react";
+
 import MapView, { Marker } from "react-native-maps";
 
-export default function Map({ route, navigation }) {
+export default function Map({ navigation }) {
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const { latitude, longitude } = route.params || {
-    latitude: 42.3398,
-    longitude: -71.0892,
-  };
-
-  const handleLocationSelect = () => {
-    navigation.navigate("Profile", {
-      screen: "Profile",
-      params: {
-        selectedLocation: selectedLocation
-      }
-    });
-  };
-
+  function confirmHandler() {
+    //navigate to Profile and pass selectedLocation as params
+    navigation.navigate("Profile", { selectedLocation });
+  }
   return (
-    <View style={styles.container}>
+    <>
       <MapView
         onPress={(e) => {
           setSelectedLocation({
@@ -29,42 +20,21 @@ export default function Map({ route, navigation }) {
         }}
         style={styles.map}
         initialRegion={{
-          latitude: latitude,
-          longitude: longitude,
+          latitude: 37.78825,
+          longitude: -122.4324,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
       >
-        {selectedLocation && (
-          <Marker
-            coordinate={selectedLocation}
-            title="Selected Location"
-            description="The selected location"
-          />
-        )}
+        {selectedLocation && <Marker coordinate={selectedLocation} />}
       </MapView>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Confirm Location"
-          onPress={handleLocationSelect}
-          disabled={!selectedLocation}
-        />
-      </View>
-    </View>
+      <Button
+        disabled={!selectedLocation}
+        title="Confirm Selected Location"
+        onPress={confirmHandler}
+      />
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    width: '100%',
-    paddingHorizontal: 20,
-  }
-});
+const styles = StyleSheet.create({ map: { flex: 1 } });

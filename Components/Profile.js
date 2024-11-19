@@ -9,7 +9,6 @@ import NotificationManager from "./NotificationManager";
 
 export default function Profile({ navigation, route }) {
   const currentUser = auth.currentUser;
-  const selectedLocation = route.params?.selectedLocation;
 
   useEffect(() => {
     navigation.setOptions({
@@ -40,7 +39,7 @@ export default function Profile({ navigation, route }) {
         <Text style={styles.label}>User ID:</Text>
         <Text style={styles.value}>{currentUser?.uid}</Text>
       </View>
-      <LocationManager navigation={navigation} route={route} />
+      <LocationManager />
       <NotificationManager />
     </View>
   );
